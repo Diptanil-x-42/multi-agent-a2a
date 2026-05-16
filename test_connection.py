@@ -16,3 +16,4 @@ response = client.models.generate_content(
 
 print("API connection successful!")
 print(f"Response: {response.text}")
+

@@ -1,11 +1,9 @@
 from dotenv import load_dotenv
-
-load_dotenv()
-
 import requests
-
 from google.adk import Agent
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
+
+load_dotenv()
 
 
 def get_weather(city: str) -> dict:
@@ -58,7 +56,6 @@ def get_weather(city: str) -> dict:
         }
     except Exception as e:
         return {"status": "error", "error_message": str(e)}
-    
 
 weather_agent = Agent(
     model="gemini-2.5-flash",

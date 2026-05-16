@@ -1,4 +1,3 @@
-import pytest
 from weather_agent.agent import get_weather
 from github_agent.agent import get_repo_info, get_open_issues
 
@@ -40,4 +39,5 @@ def test_get_open_issues_valid():
 def test_get_open_issues_respects_max():
     result = get_open_issues("google", "adk-python", count=20)
     assert result["status"] == "success"
-    assert result["total_count"] <= 10    
+    assert result["total_count"] <= 10
+

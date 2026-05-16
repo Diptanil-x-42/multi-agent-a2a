@@ -1,11 +1,9 @@
 from dotenv import load_dotenv
-
-load_dotenv()
-
 import requests
-
 from google.adk import Agent
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
+
+load_dotenv()
 
 
 def get_repo_info(owner: str, repo: str) -> dict:
@@ -44,7 +42,7 @@ def get_repo_info(owner: str, repo: str) -> dict:
         }
     except Exception as e:
         return {"status": "error", "error_message": str(e)}
-    
+
 
 def get_open_issues(owner: str, repo: str, count: int = 5) -> dict:
     """Get the most recent open issues for a GitHub repository.
@@ -88,7 +86,7 @@ def get_open_issues(owner: str, repo: str, count: int = 5) -> dict:
             "total_count": len(issues),
         }
     except Exception as e:
-        return {"status": "error", "error_message": str(e)}   
+        return {"status": "error", "error_message": str(e)}
 
 
 github_agent = Agent(
@@ -104,9 +102,5 @@ github_agent = Agent(
     tools=[get_repo_info, get_open_issues],
 )
 
-a2a_app = to_a2a(github_agent, port=8002)     
+a2a_app = to_a2a(github_agent, port=8002)
 
-
-
-
-    
