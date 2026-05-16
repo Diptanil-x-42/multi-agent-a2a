@@ -1,0 +1,8 @@
+google-adk[a2a]
+google-generativeai
+requests
+httpx
+uvicorn
+pytest
+ruff
+python-dotenv
