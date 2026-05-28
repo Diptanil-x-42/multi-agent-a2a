@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import requests
 from google.adk import Agent
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
+from a2a.types import AgentCapabilities, AgentCard, AgentSkill
 
 load_dotenv()
 
@@ -102,5 +103,37 @@ github_agent = Agent(
     tools=[get_repo_info, get_open_issues],
 )
 
-a2a_app = to_a2a(github_agent, port=8002)
+# Define explicit streaming capabilities
+capabilities = AgentCapabilities(streaming=True)
+
+# Create a custom Agent Card with streaming enabled
+custom_card = AgentCard(
+    name="github_agent",
+    description="An agent that provides GitHub repository insights including repo details and open issues.",
+    version="1.0.0",
+    url="http://localhost:8002/",
+    capabilities=capabilities,
+    defaultInputModes=["text/plain"],
+    defaultOutputModes=["text/plain"],
+    skills=[
+        AgentSkill(
+            id="get_repo_info",
+            name="Repository Info",
+            description="Get details about a GitHub repository including stars, forks, and description.",
+            tags=["github", "repository", "info"],
+            examples=["Tell me about the google/adk-python repo."],
+        ),
+        AgentSkill(
+            id="get_open_issues",
+            name="Open Issues",
+            description="List open issues for a GitHub repository.",
+            tags=["github", "issues", "bugs"],
+            examples=["What are the open issues in google/adk-python?"],
+        ),
+    ],
+    supportsAuthenticatedExtendedCard=False,
+)
+
+
+a2a_app = to_a2a(github_agent, port=8002, agent_card=custom_card)
 

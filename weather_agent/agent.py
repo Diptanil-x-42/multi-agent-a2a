@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import requests
 from google.adk import Agent
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
+from a2a.types import AgentCapabilities, AgentCard, AgentSkill
 
 load_dotenv()
 
@@ -68,4 +69,29 @@ weather_agent = Agent(
     tools=[get_weather],
 )
 
-a2a_app = to_a2a(weather_agent, port=8001)
+# Define explicit streaming capabilities
+capabilities = AgentCapabilities(streaming=True)
+
+# Create a custom Agent Card with streaming enabled
+custom_card = AgentCard(
+    name="weather_agent",
+    description="An agent that provides current weather information for any city worldwide.",
+    version="1.0.0",
+    url="http://localhost:8001/",
+    capabilities=capabilities,
+    defaultInputModes=["text/plain"],
+    defaultOutputModes=["text/plain"],
+    skills=[
+        AgentSkill(
+            id="get_weather",
+            name="Weather Lookup",
+            description="Get current weather for any city.",
+            tags=["weather", "forecast"],
+            examples=["What is the weather in Tokyo?"],
+        )
+    ],
+    supportsAuthenticatedExtendedCard=False,
+)
+
+
+a2a_app = to_a2a(weather_agent, port=8001, agent_card=custom_card)
